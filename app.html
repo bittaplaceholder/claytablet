@@ -47,7 +47,7 @@ if (receivedState !== localStorage.getItem('spotifyAuthState')) {
     }).then(
         async (responseData) => {
           spotifyApi.setAccessToken(responseData.access_token);
-          albums = Set();
+          albums = new Set();
           const getAlbums = (tracks, albumSet) => {
             tracks.items.map((trackObject)=>albumSet.add(trackObject.album.uri));
           };
