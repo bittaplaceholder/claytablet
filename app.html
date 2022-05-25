@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+
+<html>
+    <script src="js/spotify-web-api.js"></script>
+
+    <div id="rootDiv">
+        <p id="firstParagraph">Please email me the following text:</p>
+    </div>
+    <script src="js/api.js"></script>
+    <script>
+const spotifyApi = new SpotifyWebApi();
+// pull access token and anything else we need from ul
+const params = URLSearchParams(window.location.search); // '' or '?...'
+const authCode = params.get('code');
+const receivedState = params.get('state');
+let resultElement = document.createElement('p');
+let baseDiv = document.getElementById('rootDiv');
+let firstParagraph = document.getElementById('firstParagraph');
+if (receivedState !== localStorage.getItem('spotifyAuthState')) {
+    resultElement.textContent = 'Whoops! An error occurred while authorizing.'
+    baseDiv.insertBefore(resultElement, firstParagraph.nextSibling);
+
+} else {
+  if (authCode.has('error')) {
+    resultElement.textContent = 'Whoops! An error occurred while authorizing.'
+    baseDiv.insertBefore(resultElement, firstParagraph.nextSibling);
+  } else {
+    // good stuff
+    fetch('https://accounts.spotify.com/api/token', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'appliapplication/x-www-form-urlencoded;charset=UTF-8',
+      },
+      body: new URLSearchParams({
+        grant_type: 'authorization_code',
+        code: authCode,
+        redirect_uri: localStorage.get('spotifyAuthRedirectURI'),
+        client_id: '002bde7f08074554a60f193725f7c6ec',
+        code_verifier: localStorage.get('spotifyAuthVerifier'),
+      }),
+    }).then(async (response)=> {
+      if (response.ok) {
+        return await response.json();
+      } else {
+        throw {response, error: await response.json()};
+      }
+    }).then(
+        async (responseData) => {
+          spotifyApi.setAccessToken(responseData.access_token);
+          albums = Set();
+          const getAlbums = (tracks, albumSet) => {
+            tracks.items.map((trackObject)=>albumSet.add(trackObject.album.uri));
+          };
+          getAlbums(await spotifyApi.getMyTopTracks({time_range: 'long_term', limit: 50}), albums);
+          getAlbums(await spotifyApi.getMyTopTracks({time_range: 'long_term', index: 50, limit: 50}), albums);
+          getAlbums(await spotifyApi.getMyTopTracks({time_range: 'long_term', index: 100, limit: 50}), albums);
+          getAlbums(await spotifyApi.getMyTopTracks({time_range: 'long_term', index: 150, limit: 50}), albums);
+
+          albumList = '[' + Array.from(albums).join(', ') + ']';
+          resultElement.textContent=albumList;
+          baseDiv.insertBefore(resultElement, firstParagraph.nextSibling);
+        },
+    );
+  }
+}
+    </script>
+</html>

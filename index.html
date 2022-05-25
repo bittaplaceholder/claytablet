@@ -1,40 +1,39 @@
 <!DOCTYPE html>
+
 <html>
-	<head>
-		<title> Clay Tablet </title>
-		<meta charset="utf-8" >
-		<link rel="stylesheet" href="css/style.css">
-	</head>
 
-	<body>
-		<h1 id="no"> Click A Tablet To Translate. </h1>
-		<p class="tablet translatable">
-			Dear Lucy,
-		</p>
 
-		<p class="tablet translatable">
-			The end of a school year is a strange time. Every year so far, I've been one of the last people to head home. I don't remember whether that was a conscious decision I made in past years. This time, at least, I had an exam on Friday, so I chose to move out Saturday. I suppose I could've left on Tuesday - all my exams after Monday are online - but the possibility never really occurred to me. In any case, it feels like a personal tradition now.
-		</p>
-		
-		<p class="tablet translatable">
-			It's weird. In our freshman and sophomore years, the last day or two always had a unique atmosphere. There was just a stark contrast between the liveliness of the floor and campus on the second-to-last Friday and that of the final one. This year, that sense is more muted. I guess it's just because there wasn't that much happening on the floor when people were still around.
-		</p>
-		<p class="tablet translatable">
-			This semester has been a real mixed bag. On the one hand, the  	"school" side of school is going great. I've learned a lot of really cool stuff this semester, especially in my out-of-major classes, and there's a decent chance I'll escape with a 4.0 for the term. But it has felt like a bit of a backslide socially. We somehow made it a full semester without getting more than four of [you, me, Nick, Emily, Hayden, Richard] together in one place. Heck, we only rarely managed to get more than three, despite that set of six people including two sets of room/housemates. As far as any sort of collective identity or narrative is concerned, it's like we skipped forwards a year. I'm interested to see what the social scene looks like when we all return.
-		</p>
-		<p class="tablet translatable">
-			That's not to say that I'm particularly sad or regretful. I still made new friends this year, and I'd like to think I've maintained all my friendships that really matter. I certainly feel like I've gained some perspective on life. It's just weird to look back on it all now that it's mostly over
-		</p>
-		
-		<p class="tablet translatable">
-			I hope you've been as fortunate as I have in these regards. Now that you're a little more removed from things, how do you feel about your semester and year as a whole? Got any bold plans for next year? Any new people to bring to the *excellent* parties Nick, Richard and I will be hosting? Senior year is going to be an exciting time, I expect.
-		</p>
-		<p class="tablet translatable">
-			All my best, Edward.
-		</p>
-		<p class="tablet translatable">
-			P.S. I hope this whole convoluted letter-sending scheme isn't too extra (do people still say that?). I was really bored when I first came up with it. But then how many people prepare clay from scratch when they have something exciting going on? It was pretty fun to figure out, though. Would definitely recommend.
-		</p>
-	</body>
-	<script type="text/javascript" src="js/translatron.js"> </script>
+    <div id='rootDiv'>
+        <p>Click the button!</p>
+    </div>
+            <script>
+        function generateRandomString(length, possible) {
+          var text = '';
+
+
+          for (var i = 0; i < length; i++) {
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+          }
+          return text;
+        };
+
+        
+        let state = generateRandomString(16, 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789');
+        let verifier = generateRandomString(43 + Math.floor(Math.random() * 86), 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_.-~')
+        localStorage.setItem('spotifyAuthVerifier', verifier);
+        let challenge = btoa(String.fromCharCode(...new Uint8Array(crypto.subtle.digest('SHA-256', new TextEncoder().encode(verifier))))).replace(/=/g,'').replace(/\+/g,'-').replace(/\//g, '_');
+        localStorage.setItem('spotifyAuthState', state);
+
+        const redirectUri = 'file:///S:/Dumb Shit/Spotify/claytablet-api/app.html/';
+        const scope = ['user-top-read']
+        const clientId = '002bde7f08074554a60f193725f7c6ec'
+        localStorage.setItem('spotifyAuthRedirectURI', redirectUri);
+        const promptUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope.join('%20')}&state=${state}&code_challenge_method=S256&code_challenge=${challenge}&response_type=token&show_dialog=true`
+
+        let linkNode = document.createElement('a');
+        linkNode.href = promptUrl;
+        linkNode.textContent = 'ayyy';
+        let baseDiv = document.getElementById('rootDiv');
+        document.body.insertBefore(linkNode, baseDiv);
+    </script>
 </html>
