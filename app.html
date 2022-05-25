@@ -10,7 +10,7 @@
     <script>
 const spotifyApi = new SpotifyWebApi();
 // pull access token and anything else we need from ul
-const params = URLSearchParams(window.location.search); // '' or '?...'
+const params = new URLSearchParams(window.location.search); // '' or '?...'
 const authCode = params.get('code');
 const receivedState = params.get('state');
 let resultElement = document.createElement('p');
