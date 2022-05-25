@@ -38,6 +38,7 @@ if (receivedState !== localStorage.getItem('spotifyAuthState')) {
         code_verifier: localStorage.getItem('spotifyAuthVerifier'),
       }),
     }).then(async (response)=> {
+      console.log(response)
       if (response.ok) {
         return await response.json();
       } else {
