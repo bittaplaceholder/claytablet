@@ -10,8 +10,8 @@
 const spotifyApi = new SpotifyWebApi();
 // pull access token and anything else we need from ul
 const params = new URLSearchParams(window.location.search); // '' or '?...'
-const authCode = params.getItem('code');
-const receivedState = params.getItem('state');
+const authCode = params.get('code');
+const receivedState = params.get('state');
 let resultElement = document.createElement('p');
 let baseDiv = document.getElementById('rootDiv');
 let firstParagraph = document.getElementById('firstParagraph');
