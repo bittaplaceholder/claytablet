@@ -10,8 +10,8 @@
 const spotifyApi = new SpotifyWebApi();
 // pull access token and anything else we need from ul
 const params = new URLSearchParams(window.location.search); // '' or '?...'
-const authCode = params.get('code');
-const receivedState = params.get('state');
+const authCode = params.getItem('code');
+const receivedState = params.getItem('state');
 let resultElement = document.createElement('p');
 let baseDiv = document.getElementById('rootDiv');
 let firstParagraph = document.getElementById('firstParagraph');
@@ -33,9 +33,9 @@ if (receivedState !== localStorage.getItem('spotifyAuthState')) {
       body: new URLSearchParams({
         grant_type: 'authorization_code',
         code: authCode,
-        redirect_uri: localStorage.get('spotifyAuthRedirectURI'),
+        redirect_uri: localStorage.getItem('spotifyAuthRedirectURI'),
         client_id: '002bde7f08074554a60f193725f7c6ec',
-        code_verifier: localStorage.get('spotifyAuthVerifier'),
+        code_verifier: localStorage.getItem('spotifyAuthVerifier'),
       }),
     }).then(async (response)=> {
       if (response.ok) {
