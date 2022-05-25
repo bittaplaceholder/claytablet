@@ -24,7 +24,7 @@
         let challenge = btoa(String.fromCharCode(...new Uint8Array(crypto.subtle.digest('SHA-256', new TextEncoder().encode(verifier))))).replace(/=/g,'').replace(/\+/g,'-').replace(/\//g, '_');
         localStorage.setItem('spotifyAuthState', state);
 
-        const redirectUri = 'file:///S:/Dumb Shit/Spotify/claytablet-api/app.html/';
+        const redirectUri = 'https://claytablet.info/app.html';
         const scope = ['user-top-read']
         const clientId = '002bde7f08074554a60f193725f7c6ec'
         localStorage.setItem('spotifyAuthRedirectURI', redirectUri);
