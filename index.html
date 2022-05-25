@@ -18,22 +18,26 @@
         };
 
         
-        let state = generateRandomString(16, 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789');
-        let verifier = generateRandomString(43 + Math.floor(Math.random() * 86), 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_.-~')
+        const state = generateRandomString(16, 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789');
+        const verifier = generateRandomString(43 + Math.floor(Math.random() * 86), 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_.-~')
         localStorage.setItem('spotifyAuthVerifier', verifier);
-        let challenge = btoa(String.fromCharCode(...new Uint8Array(crypto.subtle.digest('SHA-256', new TextEncoder().encode(verifier))))).replace(/=/g,'').replace(/\+/g,'-').replace(/\//g, '_');
-        localStorage.setItem('spotifyAuthState', state);
+        
+        crypto.subtle.digest('SHA-256', new TextEncoder().encode(verifier)).then((verifierHash) => {
+          const challenge = btoa(String.fromCharCode(...new Uint8Array(verifierHash))).replace(/=/g,'').replace(/\+/g,'-').replace(/\//g, '_');
+          localStorage.setItem('spotifyAuthState', state);
+          const redirectUri = 'https://claytablet.info/app.html';
+          const scope = ['user-top-read']
+          const clientId = '002bde7f08074554a60f193725f7c6ec'
+          localStorage.setItem('spotifyAuthRedirectURI', redirectUri);
+          const promptUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope.join('%20')}&state=${state}&code_challenge_method=S256&code_challenge=${challenge}&response_type=code&show_dialog=true`
 
-        const redirectUri = 'https://claytablet.info/app.html';
-        const scope = ['user-top-read']
-        const clientId = '002bde7f08074554a60f193725f7c6ec'
-        localStorage.setItem('spotifyAuthRedirectURI', redirectUri);
-        const promptUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope.join('%20')}&state=${state}&code_challenge_method=S256&code_challenge=${challenge}&response_type=code&show_dialog=true`
+          let linkNode = document.createElement('a');
+          linkNode.href = promptUrl;
+          linkNode.textContent = 'ayyy';
+          let baseDiv = document.getElementById('rootDiv');
+          document.body.insertBefore(linkNode, baseDiv);
+        })
+        
 
-        let linkNode = document.createElement('a');
-        linkNode.href = promptUrl;
-        linkNode.textContent = 'ayyy';
-        let baseDiv = document.getElementById('rootDiv');
-        document.body.insertBefore(linkNode, baseDiv);
     </script>
 </html>
