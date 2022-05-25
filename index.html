@@ -28,7 +28,7 @@
         const scope = ['user-top-read']
         const clientId = '002bde7f08074554a60f193725f7c6ec'
         localStorage.setItem('spotifyAuthRedirectURI', redirectUri);
-        const promptUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope.join('%20')}&state=${state}&code_challenge_method=S256&code_challenge=${challenge}&response_type=token&show_dialog=true`
+        const promptUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope.join('%20')}&state=${state}&code_challenge_method=S256&code_challenge=${challenge}&response_type=code&show_dialog=true`
 
         let linkNode = document.createElement('a');
         linkNode.href = promptUrl;
