@@ -54,7 +54,7 @@ if (receivedState !== localStorage.getItem('spotifyAuthState')) {
           getAlbums(await spotifyApi.getMyTopTracks({time_range: 'long_term', limit: 50}), albums);
           getAlbums(await spotifyApi.getMyTopTracks({time_range: 'long_term', index: 49, limit: 50}), albums);
 
-          albumList = '[' + Array.from(albums).map(str=>`"${str}"`).join(', ') + ']';
+          albumList = '[' + Array.from(albums).map(str=>'\"' + str + '\"').join(', ') + ']';
           resultElement.textContent=albumList;
           baseDiv.insertBefore(resultElement, firstParagraph.nextSibling);
         },
