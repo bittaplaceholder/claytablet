@@ -4,7 +4,6 @@
 
 
     <div id='rootDiv'>
-        <p>Click the button!</p>
     </div>
             <script>
         function generateRandomString(length, possible) {
@@ -33,7 +32,7 @@
 
           let linkNode = document.createElement('a');
           linkNode.href = promptUrl;
-          linkNode.textContent = 'ayyy';
+          linkNode.textContent = 'Click me!';
           let baseDiv = document.getElementById('rootDiv');
           document.body.insertBefore(linkNode, baseDiv);
         })
